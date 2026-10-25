@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MockHire AI Interview Coach</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <main class="shell">
+    <header class="hero">
+      <div><span class="eyebrow">AI INTERVIEW PRACTICE</span><h1>MockHire</h1><p>Role-specific mock interviews with explainable semantic, STAR and competency feedback.</p></div>
+      <div class="status">Human-in-the-loop portfolio prototype</div>
+    </header>
+
+    <section class="panel grid two">
+      <div>
+        <label>Candidate name</label><input id="candidate" value="Demo Candidate" autocomplete="name">
+      </div>
+      <div>
+        <label>Target role</label><select id="role"></select>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="section-title"><div><span class="step">01</span><h2>Interview</h2></div><button id="historyBtn" class="ghost">Load history</button></div>
+      <p id="roleDescription" class="muted"></p>
+      <form id="interviewForm"><div id="questions"></div><button class="primary" type="submit">Evaluate interview</button></form>
+      <p id="message" class="message"></p>
+    </section>
+
+    <section id="results" class="panel hidden">
+      <div class="section-title"><div><span class="step">02</span><h2>Performance dashboard</h2></div><div id="scoreBadge" class="score-badge">0</div></div>
+      <div id="dimensionCards" class="grid metrics"></div>
+      <h3>Question feedback</h3><div id="feedback"></div>
+      <h3>Competency trend</h3><div id="competencies" class="bars"></div>
+      <h3>Session history</h3><div id="history"></div>
+    </section>
+
+    <footer>Voice transcription uses the browser Web Speech API when supported. Semantic scoring uses S-BERT when installed and a deterministic fallback otherwise.</footer>
+  </main>
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
