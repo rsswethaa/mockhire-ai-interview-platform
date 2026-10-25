@@ -1,39 +1,57 @@
 # MockHire — AI Interview Platform
 
-A portfolio reconstruction of an intelligent interview platform that structures interview questions, scores candidate responses against job competencies and produces explainable feedback.
+A complete educational portfolio system for structured interview planning, explainable candidate-response scoring, persistence, auditability and human review.
 
-## Features
-- role/competency driven interview plans
-- deterministic response scoring for reproducible demos
-- communication, relevance and evidence signals
-- weighted candidate scorecards
-- explainable feedback rather than opaque pass/fail output
-- automated tests and CI
+## What this repository contains
+- working Python interview and evaluation modules
+- SQLite persistence for roles, candidates, questions, sessions, responses and evaluations
+- deterministic seed data and sample SQL queries
+- architecture, sequence and ER diagrams
+- interface/API contracts
+- automated unit and storage tests
+- GitHub Actions CI
+- deployment/runbook notes
+- security, privacy and responsible-hiring guidance
+- model card and formal technical report
 
-## Architecture
+## Core workflow
 ```mermaid
 flowchart LR
-  J[Job profile] --> Q[Question bank]
-  Q --> I[Interview session]
-  A[Candidate answer] --> E[Response evaluator]
-  I --> E
-  E --> S[Scorecard]
-  S --> F[Feedback report]
+  R[Role profile] --> Q[Question bank]
+  C[Candidate] --> S[Interview session]
+  Q --> S
+  S --> A[Candidate response]
+  A --> E[Explainable evaluator]
+  E --> DB[(SQLite audit store)]
+  DB --> H[Human review]
+  H --> F[Feedback / decision support]
 ```
 
 ## Run
 ```bash
-python -m unittest discover -s tests -v
 python demo.py
+python -m unittest discover -s tests -v
 ```
 
-## Repository
-- `src/evaluator.py` — response feature extraction and scoring
-- `src/interview.py` — interview orchestration
-- `data/question_bank.json` — sample competencies/questions
-- `tests/` — automated validation
-- `docs/ARCHITECTURE.md` — system design
-- `docs/REPORT.md` — technical project report
+## Database
+```bash
+python -c "from src.storage import init_db; init_db('mockhire.db', seed=True)"
+```
+
+The database is local demo infrastructure only; `mockhire.db` is ignored by Git.
+
+## Repository structure
+```text
+src/                 scoring, orchestration and persistence code
+database/            schema, seed and reporting SQL
+data/                 sample question bank
+tests/                evaluator + database tests
+docs/                 architecture, database, API, testing, deployment, security, model card and report
+.github/workflows/    CI
+```
+
+## Responsible-use boundary
+MockHire is decision-support software, not an autonomous hiring authority. Real use would require validated job-related criteria, bias and accessibility testing, candidate notice/consent, retention controls, human review and legal/compliance assessment.
 
 ## Integrity note
-This is a modern portfolio implementation of the project concept, not a claim that these files are the exact archived source of an earlier academic submission. No real hiring decision should rely on this prototype alone.
+This is a modern portfolio implementation of the project concept and is not represented as the exact archived source code from an earlier academic submission.
