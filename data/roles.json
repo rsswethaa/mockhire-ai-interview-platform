@@ -1,0 +1,34 @@
+{
+  "Finance Analyst": {
+    "description": "Financial analysis, modelling, reporting and stakeholder communication.",
+    "questions": [
+      {"competency":"financial_analysis","question":"Tell me about a time you used financial data to support a decision.","keywords":["financial","analysis","data","decision","result"],"weight":1.2},
+      {"competency":"communication","question":"Describe how you explained a complex financial insight to a non-finance stakeholder.","keywords":["stakeholder","explain","insight","communication","outcome"],"weight":1.0},
+      {"competency":"planning","question":"How do you prioritise competing reporting deadlines?","keywords":["priority","deadline","plan","risk","stakeholder"],"weight":1.0}
+    ]
+  },
+  "Data Analyst": {
+    "description": "SQL, Python, analytics, visualisation and business insight.",
+    "questions": [
+      {"competency":"data_analysis","question":"Describe a data problem you solved end to end.","keywords":["data","sql","python","analysis","result"],"weight":1.2},
+      {"competency":"insight","question":"Tell me about a time your analysis changed a business decision.","keywords":["analysis","insight","decision","stakeholder","impact"],"weight":1.1},
+      {"competency":"quality","question":"How do you validate data quality before reporting?","keywords":["validate","quality","missing","duplicate","check"],"weight":1.0}
+    ]
+  },
+  "Business Analyst": {
+    "description": "Requirements, process improvement, stakeholders and change delivery.",
+    "questions": [
+      {"competency":"requirements","question":"Describe how you gathered requirements from conflicting stakeholders.","keywords":["requirements","stakeholder","conflict","prioritise","decision"],"weight":1.2},
+      {"competency":"process","question":"Tell me about a process you improved and how you measured the result.","keywords":["process","improved","measure","result","workflow"],"weight":1.1},
+      {"competency":"communication","question":"How do you communicate a change that users may resist?","keywords":["communication","change","user","stakeholder","feedback"],"weight":1.0}
+    ]
+  },
+  "Software Engineer": {
+    "description": "Software delivery, debugging, system design and teamwork.",
+    "questions": [
+      {"competency":"engineering","question":"Describe a difficult technical problem you solved.","keywords":["problem","code","design","test","result"],"weight":1.2},
+      {"competency":"debugging","question":"Walk me through how you diagnose a production defect.","keywords":["logs","reproduce","debug","root","test"],"weight":1.1},
+      {"competency":"collaboration","question":"Tell me about a technical disagreement and how you resolved it.","keywords":["team","tradeoff","decision","communication","outcome"],"weight":1.0}
+    ]
+  }
+}
