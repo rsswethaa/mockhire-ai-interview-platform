@@ -1,27 +1,50 @@
-# MockHire — AI Interview Platform
+# MockHire — AI Interview Practice Platform
+
+**Status: Active portfolio product**
 
 [![CI](https://github.com/rsswethaa/mockhire-ai-interview-platform/actions/workflows/ci.yml/badge.svg)](https://github.com/rsswethaa/mockhire-ai-interview-platform/actions/workflows/ci.yml)
 
-A product-style AI interview practice platform with role-specific question banks, browser voice transcription, hybrid semantic scoring, STAR feedback, persistent candidate history and competency analytics.
+**[Live Demo](https://swethaa-mockhire.onrender.com) · [Architecture](docs/ARCHITECTURE.md) · [Security](SECURITY.md) · [Model Card](docs/MODEL_CARD.md)**
 
-## Why it matters
-Interview practice is often generic and inconsistent. MockHire gives candidates a repeatable way to practise against job competencies and see how their evidence, relevance, clarity and STAR structure improve over time.
+## The problem
 
-## Product features
-- polished Flask web interface
-- Finance Analyst, Data Analyst, Business Analyst and Software Engineer interview tracks
-- browser speech-to-text using the Web Speech API
+Interview practice is usually generic: candidates answer a question, but they do not get a consistent view of whether the response was relevant, evidence-based, clearly structured or improving over time.
+
+MockHire turns that into a repeatable practice workflow. A candidate chooses a role, answers competency questions by typing or speaking, receives explainable feedback, and can compare performance across sessions.
+
+## What it does
+
+- role-specific tracks for Finance Analyst, Data Analyst, Business Analyst and Software Engineer
+- browser speech-to-text with the Web Speech API
 - semantic relevance scoring with optional Sentence-BERT
-- deterministic fallback scoring for reproducible CI
-- STAR structure analysis
-- evidence, clarity and competency feedback
-- candidate session history stored in SQLite
+- deterministic fallback scoring for lightweight/reproducible environments
+- STAR structure and evidence analysis
+- relevance, clarity and competency feedback
+- persistent candidate/session history
 - competency trend dashboard
-- recruiter/integration-ready JSON endpoints
-- Docker packaging and environment configuration
-- automated unit, database and end-to-end API tests
+- JSON integration endpoints
+- Docker packaging and CI
+
+## Key engineering decisions
+
+### Hybrid semantic scoring
+
+Keyword overlap alone misses paraphrases. Optional Sentence-BERT improves semantic matching, while a deterministic fallback keeps the application usable in CI and resource-constrained deployments.
+
+### Explain the score
+
+The product does not stop at a single number. Feedback is split into dimensions such as relevance, evidence and clarity so the candidate can act on it.
+
+### Persistent history instead of one-off scoring
+
+Sessions and evaluation dimensions are stored so improvement can be analysed over time rather than treating every answer as an isolated request.
+
+### Hiring boundary
+
+MockHire is intentionally positioned as **practice and decision support**, not an autonomous hiring authority. The project does not claim validated prediction of employee performance.
 
 ## Architecture
+
 ```mermaid
 flowchart LR
   U[Candidate] --> W[Flask web app]
@@ -30,59 +53,53 @@ flowchart LR
   Q --> S[Hybrid scoring engine]
   V --> S
   S --> R[Explainable feedback]
-  S --> DB[(SQLite audit store)]
+  S --> DB[(Audit store)]
   DB --> A[History + competency analytics]
   A --> W
 ```
 
-## Quick start
+## API
+
+- `GET /api/roles` — role profiles and question banks
+- `POST /api/evaluate` — evaluate and persist an interview
+- `GET /api/history?candidate=...` — previous sessions and competency summaries
+- `GET /health` — service health
+
+## Run locally
+
 ```bash
 python -m venv .venv
 source .venv/bin/activate  # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 python app.py
 ```
-Open `http://127.0.0.1:5000`.
 
-### Optional S-BERT semantic scoring
+Optional semantic model support:
+
 ```bash
 pip install -r requirements-ml.txt
 ```
-If the model package is unavailable, the application automatically uses a lightweight deterministic semantic proxy.
 
-### Docker
+Docker:
+
 ```bash
 docker build -t mockhire .
 docker run -p 5000:5000 mockhire
 ```
 
-## API
-- `GET /api/roles` — role profiles and question banks
-- `POST /api/evaluate` — evaluate and persist a complete interview
-- `GET /api/history?candidate=...` — previous sessions and competency summaries
-- `GET /health` — service health
+## Data and auditability
 
-## Database and auditability
-The SQLite database stores roles, candidates, questions, interview sessions, answers, evaluation dimensions, model version and timestamps. The `database/` folder includes schema, seed data and reporting queries; `docs/DATABASE.md` includes the ER diagram and data dictionary.
+The project persists roles, candidates, questions, interview sessions, answers, evaluation dimensions, model version and timestamps. The `database/` directory contains schema/seed/reporting SQL; `docs/DATABASE.md` documents the data model.
 
-## Project structure
-```text
-app.py               web/API application
-templates/, static/   product interface
-src/                  scoring, interview and persistence modules
-database/             schema, seed and reporting SQL
-data/roles.json        role-specific interview bank
-notebooks/             scoring exploration
-tests/                 core, database and product/API tests
-docs/                  architecture, product, API, security, testing, deployment, model card and report
-.github/workflows/     CI
-```
+## Limitations
 
-## What I learned
-This project demonstrates NLP product design, explainable scoring, Flask APIs, browser speech integration, SQLite analytics, model fallback design, Docker, CI and responsible-AI documentation.
+- semantic scores are not validated job-performance predictions
+- browser speech recognition availability varies by browser/device
+- fairness cannot be established merely by excluding protected attributes
+- real employment use would require job-related validation, accessibility review, privacy controls, representative outcome testing and human oversight
 
-## Responsible use
-MockHire is a practice and decision-support prototype, not an autonomous hiring system. Real employment use requires validated job-related rubrics, bias/fairness testing, accessibility review, consent, privacy controls and human oversight.
+See [SECURITY.md](SECURITY.md) and [docs/MODEL_CARD.md](docs/MODEL_CARD.md) for the operational and responsible-use boundaries.
 
-## Integrity note
-This is a modern portfolio implementation of the project concept, not a claim that these files are an archived copy of an earlier academic submission. No fabricated accuracy or hiring-performance claims are made.
+## Why I built it
+
+The project combines NLP, product design and analytics around a practical user problem: helping people practise communication in a way that is more structured and measurable than generic interview prompts.
